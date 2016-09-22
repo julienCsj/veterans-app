@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Page de conexion
+GET     /                                       backoffice.Application.connexion
+POST    /connexion                              backoffice.Application.connexionPost
+GET     /connexion/{hash}                       backoffice.Application.connexionHash
+GET     /setData                                backoffice.Application.setData
+
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  backoffice.{controller}.{action}

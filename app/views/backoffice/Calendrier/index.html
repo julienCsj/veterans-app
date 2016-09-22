@@ -1,0 +1,497 @@
+#{extends 'backoffice/BasePageBackoffice.html'/}
+
+<style>
+    .pac-container {
+        z-index: 1040 !important;
+    }
+
+</style>
+
+<span class="hidden" id="evenementAAfficher">${idEvenementAOuvrir}</span>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-header bordered">
+                    <h3 class="box-title">Evénements</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#ajouterEvenement">Ajouter un évènement</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id='external-events'>
+                            #{list evenementNonPlaces}
+                                <div class="external-event" data-titre="${_.titre}" data-description="${_.description}" data-couleur="${_.categorie.couleur}" data-id="${_.id}">
+                                    <span class="list-group-item external-event" style="background-color: ${_.categorie.couleur}">
+                                        <div class="pull-right"><a href="@{backoffice.Calendrier.supprimerEvenement(_.id)}" style="color: #f5f5f5"><i class="ion ion-trash-b"> </i></a></div>
+                                        <h4 class="list-group-item-heading" id="list-group-item-heading" style="color:white;">${_.titre}</h4>
+                                        <p class="list-group-item-text"><small>${_.description}</small></p>
+                                    </span>
+                                </div>
+                            #{/list}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col -->
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-header bordered">
+                    <h3 class="box-title">Calendrier <small>Vous pouvez modifier la date ou la durée d'un événement en l'étirant ou le déplacant sur le calendrier</small></h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modelVueAnnee">Voir l'année complète</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="calendar" data-evenements="
+                            [#{list evenementPlaces}
+                                {
+                                id: #{if _.id == null}null#{/if}#{else}${_.id}#{/else},
+                                title: '${_.titre.addSlashes()} [${_.compte.pseudo}]',
+                                start: '${_.dateDebut.format("yyyy-MM-dd'T'HH:mm:ss")}',
+                                end: '${_.dateFin?.format("yyyy-MM-dd'T'HH:mm:ss")}',
+                                backgroundColor: '${_.categorie.couleur}',
+                                borderColor: '${_.categorie.couleur}',
+                                #{if _.id == null}startEditable: false,#{/if}
+                                allDay: #{if (_.dateDebut && !_.dateFin && _.dateDebut.format("HH:mm:ss").equals("00:00:00")) || (_.dateDebut && _.dateFin && _.dateDebut.format("HH:mm:ss").equals("00:00:00") && _.dateFin.format("HH:mm:ss").equals("00:00:00"))}true#{/if}#{else}false#{/else},
+                                }#{if _ != evenementPlaces.last()},#{/if}
+                            #{/list} ]
+                            "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</section><!-- /.content --><!-- Main content -->
+
+<!-- Modal ajout-->
+<div class="modal fade" id="ajouterEvenement" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" method="POST" accept-charset="utf-8" action="@{backoffice.Calendrier.ajouterEvenementPost}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Ajouter un évènement</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="titre">Titre</label>
+                            <input type="text" class="form-control" id="titre" name="titre" placeholder="Titre de l'évènement">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Type d'évenement</label>
+                            <select class="form-control" id="type" name="categorie">
+                            #{list categories}
+                                <option value="${_}">${_.traduction}</option>
+                            #{/list}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="titre">URL du post sur le forum</label>
+                            <input type="text" class="form-control" id="urlFoum" name="urlForum">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <input type="submit" class="btn btn-primary" value="Ajouter" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal click event -->
+<div class="modal fade" id="voirEvenement" tabindex="-1" role="dialog" aria-labelledby="voirEvenement_titreModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" method="POST" accept-charset="utf-8" enctype="multipart/form-data" action="@{backoffice.Calendrier.traiterEvenementPost}">
+                <input type="hidden" id="voirEvenement_id" name="id" value="" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&nbsp; &times;</span></button>
+                    <div class="pull-right">
+                        <input type="submit" id="voirEvenement_btnParticiper" name="" class="btn btn-primary btn-xs" value="" />
+                        <input type="submit" name="supprimer" class="btn btn-danger btn-xs" value="Supprimer l'évènement" />
+                    </div>
+                    <h4 class="modal-title" id="voirEvenement_titreModal"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="voirEvenement_listeWell" class="well well-lg bg-info">
+                            Liste des participants :
+                            <ul id="voirEvenement_liste" class="">
+
+                            </ul>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="titre">Nouveau participant</label>
+                            <select class="form-control" id="" name="idCompte">
+                            #{list items:comptes, as:"compte"}
+                                <option value="${compte.id}">${compte.pseudo}</option>
+                            #{/list}
+                            </select>
+                            <br>
+                            <input type="submit" name="ajouterParticipant" class="btn btn-success btn-xs pull-right" value="Ajouter participant" />
+                        </div>
+
+                        <p>L'évènement a été créé par <span id="voirEvenement_createur"></span>.<br>
+
+                        <div class="form-group">
+                            <label for="titre">Titre</label>
+                            <input type="text" class="form-control" id="voirEvenement_titre" name="titre" placeholder="Titre de l'évènement">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="voirEvenement_description" name="description"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Type d'évenement</label>
+                            <select class="form-control" id="voirEvenement_type" name="categorie">
+                            #{list categories}
+                                <option id="voirEvenement_cat_${_}" value="${_}">${_.traduction}</option>
+                            #{/list}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="titre">URL du post sur le forum</label>
+                            <input type="text" class="form-control" id="urlForum2" name="urlForum">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <input type="submit" name="modifier" class="btn btn-primary" value="Modifier" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modelVueAnnee" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Liste des évènements sur les 12 prochains mois</h4>
+            </div>
+            <div class="modal-body">
+            #{list evenementParMois.entrySet()}
+                #{if _.getValue().size() > 0}
+                    <h5>Mois de ${_.getKey()}</h5>
+                    <ul>
+                        #{list items:_.getValue(), as:'evenement'}
+                            <li>Le <strong>${evenement.dateDebut.format("dd/MM/yyyy")}</strong>
+                                #{if evenement.dateDebut.format("HH:mm") != "00:00"} à <strong>${evenement.dateDebut.format("HH:mm")}</strong>#{/if}
+                                : ${evenement.titre}
+                                <span class="badge" style="background-color: ${evenement.categorie.couleur}">${evenement.categorie.traduction}</span>
+                                <a href="#" class="voirEvenement12Mois" data-id="${evenement.id}"><i class="fa fa-arrow-circle-right"></i></a></li>
+                        #{/list}
+                    </ul>
+                #{/if}
+            #{/list}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $(function () {
+            /* initialize the external events
+             -----------------------------------------------------------------*/
+            function ini_events(ele) {
+                ele.each(function () {
+
+                    // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                    // it doesn't need to have a start or end
+                    var eventObject = {
+                        title: $.trim($(this).text()) // use the element's text as the event title
+                    };
+
+                    // store the Event Object in the DOM element so we can get to it later
+                    $(this).data('eventObject', eventObject);
+
+                    // make the event draggable using jQuery UI
+                    $(this).draggable({
+                        zIndex: 1070,
+                        revert: true, // will cause the event to go back to its
+                        revertDuration: 0  //  original position after the drag
+                    });
+
+                });
+            }
+            ini_events($('#external-events div.external-event'));
+
+            /* initialize the calendar
+             -----------------------------------------------------------------*/
+            //Date for the calendar events (dummy data)
+            var date = new Date();
+            var d = date.getDate(),
+                    m = date.getMonth(),
+                    y = date.getFullYear();
+
+
+            var data = eval($('#calendar').data("evenements"));
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                buttonText: {
+                    today: 'Aujourd\'hui',
+                    month: 'Mois',
+                    week: 'Semaine',
+                    day: 'Jour'
+                },
+                firstDay: 1,
+                monthNames:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+                monthNamesShort:['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'],
+                dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+                dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                //Random default events
+                events: data,
+                timeFormat: 'HH:mm',
+                axisFormat: 'HH:mm',
+                editable: true,
+                droppable: true,
+                eventDurationEditable: true,
+                timezone: 'Europe/Paris',
+                // Drag & Drop d'un evenement depuis la panneau de gauche
+                drop: function (date, allDay) {
+
+                    var originalEventObject = $(this).data('eventObject');
+                    var copiedEventObject = $.extend({}, originalEventObject);
+
+                    // assign it the date that was reported
+                    copiedEventObject.id = $(this).data("id");
+                    copiedEventObject.start = date;
+                    copiedEventObject.allDay = allDay;
+                    copiedEventObject.title = $(this).data("titre");
+                    copiedEventObject.backgroundColor = $(this).data("couleur");
+
+                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+                    var dateJavaDebut = moment(copiedEventObject.start).zone('Europe/Paris').format('YYYY-MM-DD HH:mm');
+                    var dateJavaFin = moment(copiedEventObject.end).zone('Europe/Paris').format('YYYY-MM-DD HH:mm');
+
+                    var route = "/calendrier/placerEvenementCalendrierAjax";
+                    var data = {
+                        idEvenement: copiedEventObject.id,
+                        dateDebut: dateJavaDebut,
+                        dateFin: ""
+                    };
+
+                    $.ajax({
+                        url: route,
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+
+                    $(this).remove();
+
+                },
+                // Drag & drop d'un element sur le calendrier
+                eventDrop: function(event, delta, revertFunc) {
+                    $('#calendar').fullCalendar('renderEvent', event, true);
+
+                    if(event.id != null) {
+                        var dateJavaDebut = moment(event.start).zone('Europe/Paris').format('YYYY-MM-DD HH:mm');
+                        var route = "/calendrier/placerEvenementCalendrierAjax";
+
+                        var data = {
+                            idEvenement: event.id,
+                            dateDebut: dateJavaDebut,
+                            dateFin: ""
+                        };
+
+                        $.ajax({
+                            url: route,
+                            type: "POST",
+                            data: data,
+                            success: function (data) {
+                                console.log(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                    }
+                },
+                eventResize: function( event, jsEvent, ui, view ) {
+                    //$('#calendar').fullCalendar('renderEvent', event, true);
+                    if(event.id != null) {
+                        var dateJavaDebut = moment(event.start).zone('Europe/Paris').format('YYYY-MM-DD HH:mm');
+                        var dateJavaFin = moment(event.end).zone('Europe/Paris').format('YYYY-MM-DD HH:mm');
+
+                        var route = "/calendrier/placerEvenementCalendrierAjax";
+                        var data = {
+                            idEvenement: event.id,
+                            dateDebut: dateJavaDebut,
+                            dateFin: dateJavaFin
+                        };
+
+                        $.ajax({
+                            url: route,
+                            type: "POST",
+                            data: data,
+                            success: function (data) {
+                                console.log(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                    }
+                },
+                eventClick: function(calEvent, jsEvent, view) {
+                    afficherModalEvent(calEvent.id);
+                }
+            });
+        });
+
+        function afficherModalEvent(id) {
+            if(typeof id != 'undefined') {
+                var route = "/calendrier/getEvenementAjax";
+                var data = {
+                    idEvenement: id
+                };
+
+                $.ajax({
+                    url: route,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        data = eval(data);
+                        $('#voirEvenement_titreModal').html(data.titre);
+                        $('#voirEvenement_titre').val(data.titre);
+                        $('#voirEvenement_description').html(data.description);
+                        $('#voirEvenement_type option[value="'+data.categorie+'"]').prop('selected', true);
+                        $('#voirEvenement_id').val(data.id);
+                        $('#voirEvenement_id2').val(data.id);
+                        $('#urlForum2').val(data.urlForum);
+
+                        $('#voirEvenement').modal();
+                        if(data.participe) {
+                            $('#voirEvenement_btnParticiper').attr('name', "nePlusParticiper");
+                            $('#voirEvenement_btnParticiper').attr("value", "Ne plus participer");
+                            $('#voirEvenement_btnParticiper').attr("class", "btn btn-warning btn-xs");
+                        } else {
+                            $('#voirEvenement_btnParticiper').attr('name', "participer");
+                            $('#voirEvenement_btnParticiper').attr("value", "Je participe");
+                            $('#voirEvenement_btnParticiper').attr("class", "btn btn-primary btn-xs");
+                        }
+
+                        $('#voirEvenement_createur').html(data.pseudo);
+                        if(data.participants.length == 0) {
+                            $('#voirEvenement_listeWell').hide();
+                        }
+
+                        $('#voirEvenement_liste').html("");
+                        $.each(data.participants, function(key, value) {
+                            $('#voirEvenement_liste').append("<li>"+value.pseudo+"</li>");
+                        })
+                    },
+                    error: function (data) {
+                        console.log("ERREUR LORS DE LA RECUPERATION DES EVENEMENTS");
+                    }
+                });
+            }
+        }
+
+        var idAAfficher = $('#evenementAAfficher').html();
+        if(typeof idAAfficher != 'undefined' && !idAAfficher == '') {
+            afficherModalEvent(idAAfficher);
+        }
+
+        $(".voirEvenement12Mois").click(function(event) {
+
+            event.preventDefault();
+            $("#modelVueAnnee").modal('hide')
+
+            var route = "/calendrier/getEvenementAjax";
+            var data = {
+                idEvenement: $(this).data("id")
+            };
+
+
+
+            $.ajax({
+                url: route,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    data = eval(data);
+                    $('#voirEvenement_titreModal').html(data.titre);
+                    $('#voirEvenement_titre').val(data.titre);
+                    $('#voirEvenement_description').html(data.description);
+                    $('#voirEvenement_type option[value="' + data.categorie + '"]').prop('selected', true);
+                    $('#voirEvenement_id').val(data.id);
+                    $('#urlForum2').val(data.urlForum);
+
+                    $('#voirEvenement').modal();
+                    if (data.participe) {
+                        $('#voirEvenement_btnParticiper').attr('name', "nePlusParticiper");
+                        $('#voirEvenement_btnParticiper').attr("value", "Ne plus participer");
+                        $('#voirEvenement_btnParticiper').attr("class", "btn btn-warning btn-xs");
+                    } else {
+                        $('#voirEvenement_btnParticiper').attr('name', "participer");
+                        $('#voirEvenement_btnParticiper').attr("value", "Je participe");
+                        $('#voirEvenement_btnParticiper').attr("class", "btn btn-primary btn-xs");
+                    }
+
+                    $('#voirEvenement_createur').html(data.pseudo);
+                    if (data.participants.length == 0) {
+                        $('#voirEvenement_listeWell').hide();
+                    }
+
+
+                    $.each(data.participants, function (key, value) {
+                        $('#voirEvenement_liste').append("<li>" + value.pseudo + "</li>");
+                    })
+
+
+                },
+                error: function (data) {
+                    console.log("ERREUR LORS DE LA RECUPERATION DES EVENEMENTS");
+                }
+            });
+        });
+    });
+
+</script>
