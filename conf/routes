@@ -9,6 +9,17 @@ GET     /connexion/{hash}                       backoffice.Application.connexion
 GET     /setData                                backoffice.Application.setData
 
 
+# Pages front
+GET /carte                                      frontoffice.PagesFront.carteVeterans
+
+
+# BOX FORUM
+GET /box-evenement/{hash}/{idTopic}              frontoffice.Forum.boxEvenenement
+GET /box-evenement/participe/{hash}/{idTopic}    frontoffice.Forum.participe
+GET /box-evenement/absent/{hash}/{idTopic}       frontoffice.Forum.absent
+GET /box-evenement/incertain/{hash}/{idTopic}    frontoffice.Forum.incertain
+
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

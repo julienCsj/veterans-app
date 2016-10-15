@@ -36,12 +36,27 @@ public class Evenement extends Model implements Comparable<Evenement> {
     @CollectionTable(name = "evenement_participant")
     public List<Compte> participants;
 
+    @Column(nullable = true, updatable = true)
+    @OneToMany
+    @ElementCollection
+    @CollectionTable(name = "evenement_incertain")
+    public List<Compte> incertains;
+
+    @Column(nullable = true, updatable = true)
+    @OneToMany
+    @ElementCollection
+    @CollectionTable(name = "evenement_absent")
+    public List<Compte> absents;
+
     @Column(nullable = false, updatable = true)
     @Enumerated(EnumType.ORDINAL)
     public CategorieEvenement categorie;
 
     @Column(nullable = true, updatable = true)
     public String urlForum;
+
+    @Column(nullable = true, updatable = true)
+    public Long idTopic;
 
 
     public Evenement(String titre, String description, Compte compte, CategorieEvenement categorie, String urlForum) {
@@ -50,6 +65,16 @@ public class Evenement extends Model implements Comparable<Evenement> {
         this.compte = compte;
         this.categorie = categorie;
         this.urlForum = urlForum;
+        this.idTopic = extractIdFromUrl(urlForum);
+    }
+
+    private Long extractIdFromUrl(String urlForum) {
+        if(urlForum == null) {
+            return null;
+        }
+
+        String idAsStr = urlForum.substring(urlForum.lastIndexOf("t=")+2);
+        return new Long(idAsStr);
     }
 
     public static List<Evenement> getLesEvenementsNonPlaces() {
