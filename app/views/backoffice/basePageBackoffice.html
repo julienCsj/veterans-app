@@ -91,6 +91,13 @@
                     </a>
                 </li>
                 #{/if}
+                    #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
+                        <li class="#{if request.action.contains("MOTD")}active#{/if}">
+                            <a href="@{backoffice.MOTD.index()}">
+                                <i class="fa fa-pencil"></i> <span>MOTD</span> <small class="label pull-right bg-green"></small>
+                            </a>
+                        </li>
+                    #{/if}
                 <li class="#{if request.action.contains("Calendrier")}active#{/if}">
                     <a href="@{backoffice.Calendrier.index()}">
                         <i class="fa fa-calendar"></i> <span>Calendrier</span> <small class="label pull-right bg-green"></small>

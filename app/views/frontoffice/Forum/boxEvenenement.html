@@ -20,7 +20,7 @@
                     <li>Absents (${evenement.absents.size()}) : #{list items:evenement.absents, as:'absent'}${absent.pseudo}#{if evenement.absents.last() != absent}, #{/if}#{/list}</li>
                 </ul>
             </td>
-            <td width="30%" style="border-top:none;">
+            <td width="30%" style="border-top:none;" class="text-center">
             #{if !evenement.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement.idTopic)}">Je participe</a><br>#{/if}
             #{if !evenement.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement.idTopic)}">Je ne sais pas</a><br>#{/if}
             #{if !evenement.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement.idTopic)}">Je suis absent</a>#{/if}

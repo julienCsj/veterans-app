@@ -2,6 +2,7 @@ package controllers.frontoffice;
 
 import models.Compte;
 import models.Evenement;
+import models.MOTD;
 import play.mvc.Controller;
 
 import java.util.Calendar;
@@ -61,6 +62,14 @@ public class Forum extends Controller {
         Date dans14jours = cal.getTime();
         List<Evenement> evenements = Evenement.find("dateDebut > ? and dateDebut < ?", new Date(), dans14jours).fetch();
         render(evenements);
+    }
+
+    public static void boxProchainEvenement(String hash) {
+        Compte compte = Compte.find("hash = ?", hash).first();
+        MOTD motd = MOTD.find("afficher = ?", true).first();
+        Evenement evenement = Evenement.find("dateDebut > ? order by dateDebut DESC", new Date()).first();
+
+        render(motd, evenement, compte);
     }
 
 }
