@@ -23,14 +23,16 @@
         #{/if}
         #{elseif evenement.categorie == models.Evenement.CategorieEvenement.ENTRAINEMENT}
             <p class="">
-                <span class="">Le prochain entrainement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <span class="lead">Le prochain entrainement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
                 <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
-                <small>${evenement.description}</small>
+                <blockquote>
+                    <p><small>${evenement.description}</small></p>
+                </blockquote>
             </p>
         #{/elseif}
         #{elseif evenement.categorie == models.Evenement.CategorieEvenement.REUNION}
             <p class="">
-                <span class="">La prochaine réunion aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <span class="lead">La prochaine réunion aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
                 <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
                 <blockquote>
                     <p><small>${evenement.description}</small></p>
@@ -39,7 +41,7 @@
         #{/elseif}
         #{else}
             <p class="">
-                <span class="">Le prochain évènement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <span class="lead">Le prochain évènement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
                 <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
                 <blockquote>
                     <p><small>${evenement.description}</small></p>
