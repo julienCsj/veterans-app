@@ -1,5 +1,6 @@
 #{extends 'frontoffice/basePageIFrame.html' /}
 
+<div style="padding:10px;">
 #{if compte == null}
 <p class="lead text-center">Il faut être connecté pour annoncer sa participation</p>
 #{/if}
@@ -31,3 +32,4 @@
     <p class="lead text-center">Aucun évènement lié à ce sujet</p>
     #{/else}
 #{/else}
+</div>
