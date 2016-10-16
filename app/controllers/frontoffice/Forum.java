@@ -36,7 +36,7 @@ public class Forum extends Controller {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ?", idTopic).first();
+        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
         render(compte, evenement);
     }
 
@@ -44,7 +44,7 @@ public class Forum extends Controller {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ?", idTopic).first();
+        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
         evenement.participants.add(compte);
         evenement.absents.remove(compte);
         evenement.incertains.remove(compte);
@@ -56,7 +56,7 @@ public class Forum extends Controller {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ?", idTopic).first();
+        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
         evenement.incertains.add(compte);
         evenement.participants.remove(compte);
         evenement.absents.remove(compte);
@@ -68,7 +68,7 @@ public class Forum extends Controller {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ?", idTopic).first();
+        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
         evenement.absents.add(compte);
         evenement.participants.remove(compte);
         evenement.incertains.remove(compte);
@@ -85,7 +85,7 @@ public class Forum extends Controller {
         cal.add(Calendar.DAY_OF_YEAR, 14);
 
         Date dans14jours = cal.getTime();
-        List<Evenement> evenements = Evenement.find("dateDebut > ? and dateDebut < ?", new Date(), dans14jours).fetch();
+        List<Evenement> evenements = Evenement.find("dateDebut > ? and dateDebut < ?  AND valide  = ?", new Date(), dans14jours, true).fetch();
         render(evenements);
     }
 
@@ -94,7 +94,7 @@ public class Forum extends Controller {
         compte.dateDerniereVueBox = new Date();
         compte.save();
         MOTD motd = MOTD.find("afficher = ?", true).first();
-        Evenement evenement = Evenement.find("dateDebut > ? order by dateDebut DESC", new Date()).first();
+        Evenement evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut DESC", new Date(), true).first();
 
         render(motd, evenement, compte);
     }
