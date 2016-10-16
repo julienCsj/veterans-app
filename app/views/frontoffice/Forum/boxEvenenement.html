@@ -1,29 +1,28 @@
 #{extends 'frontoffice/basePageIFrame.html' /}
 
-<div style="padding:10px;">
 #{if compte == null}
 <p class="lead text-center">Il faut être connecté pour annoncer sa participation</p>
 #{/if}
 #{else}
     #{if evenement}
     <p class="lead">
-    ${evenement?.titre} <i class="glyphicon glyphicon-chevron-right"></i> le ${evenement?.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}<br>
-        <small>${evenement?.description}</small>
+    ${evenement.titre} <i class="glyphicon glyphicon-chevron-right"></i> le ${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}<br>
+        <small>${evenement.description}</small>
     </p>
 
     <table class="table no-border" style="width: 100%; border-top: none;">
         <tr class="no-border" style="border-top:none;">
             <td width="70%" style="border-top:none;">
                 <ul>
-                    <li>Participants (${evenement?.participants.size()}) : #{list items:evenement?.participants, as:'participant'}${participant.pseudo} #{if evenement?.participants.last() != participant}, #{/if}#{/list}</li>
-                    <li>Incertains (${evenement?.incertains.size()}) : #{list items:evenement?.incertains, as:'incertain'}${incertain.pseudo}#{if evenement?.incertains.last() != incertain}, #{/if}#{/list}</li>
-                    <li>Absents (${evenement?.absents.size()}) : #{list items:evenement?.absents, as:'absent'}${absent.pseudo}#{if evenement?.absents.last() != absent}, #{/if}#{/list}</li>
+                    <li>Participants (${evenement.participants.size()}) : #{list items:evenement.participants, as:'participant'}${participant.pseudo} #{if evenement.participants.last() != participant}, #{/if}#{/list}</li>
+                    <li>Incertains (${evenement.incertains.size()}) : #{list items:evenement.incertains, as:'incertain'}${incertain.pseudo}#{if evenement.incertains.last() != incertain}, #{/if}#{/list}</li>
+                    <li>Absents (${evenement.absents.size()}) : #{list items:evenement.absents, as:'absent'}${absent.pseudo}#{if evenement.absents.last() != absent}, #{/if}#{/list}</li>
                 </ul>
             </td>
-            <td width="30%" style="border-top:none;" class="text-center">
-            #{if !evenement?.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement?.idTopic)}">Je participe</a><br>#{/if}
-            #{if !evenement?.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement?.idTopic)}">Je ne sais pas</a><br>#{/if}
-            #{if !evenement?.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement?.idTopic)}">Je suis absent</a>#{/if}
+            <td width="30%" style="border-top:none;">
+            #{if !evenement.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement.idTopic)}">Je participe</a><br>#{/if}
+            #{if !evenement.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement.idTopic)}">Je ne sais pas</a><br>#{/if}
+            #{if !evenement.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement.idTopic)}">Je suis absent</a>#{/if}
             </td>
         </tr>
     </table>
@@ -32,4 +31,3 @@
     <p class="lead text-center">Aucun évènement lié à ce sujet</p>
     #{/else}
 #{/else}
-</div>

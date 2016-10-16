@@ -1,5 +1,6 @@
 #{extends 'frontoffice/basePageIFrame.html' /}
 
+
 <div style="padding:10px;" xmlns="http://www.w3.org/1999/html">
 #{if compte == null}
     <p class="lead text-center">Il faut être connecté pour voir cet espace</p>
@@ -11,45 +12,45 @@
 
     #{if evenement}
 
-        #{if evenement?.categorie == models.evenement?.Categorieevenement?.MISSION}
+        #{if evenement.categorie == models.Evenement.CategorieEvenement.MISSION}
         <p class="">
-            <span class="lead">La prochaine mission aura lieu le <strong>${evenement?.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
-            <i class="glyphicon glyphicon-chevron-right"></i> ${evenement?.titre}<br>
+            <span class="lead">La prochaine mission aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+            <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
             <blockquote>
-                <p><small>${evenement?.description}</small></p>
+                <p><small>${evenement.description}</small></p>
             </blockquote>
 
         </p>
         #{/if}
-        #{elseif evenement?.categorie == models.evenement?.Categorieevenement?.ENTRAINEMENT}
+        #{elseif evenement.categorie == models.Evenement.CategorieEvenement.ENTRAINEMENT}
             <p class="">
-                <span class="lead">Le prochain entrainement aura lieu le <strong>${evenement?.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
-                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement?.titre}<br>
+                <span class="lead">Le prochain entrainement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
                 <blockquote>
-                    <p><small>${evenement?.description}</small></p>
+                    <p><small>${evenement.description}</small></p>
                 </blockquote>
             </p>
         #{/elseif}
-        #{elseif evenement?.categorie == models.evenement?.Categorieevenement?.REUNION}
+        #{elseif evenement.categorie == models.Evenement.CategorieEvenement.REUNION}
             <p class="">
-                <span class="lead">La prochaine réunion aura lieu le <strong>${evenement?.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
-                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement?.titre}<br>
+                <span class="lead">La prochaine réunion aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
                 <blockquote>
-                    <p><small>${evenement?.description}</small></p>
+                    <p><small>${evenement.description}</small></p>
                 </blockquote>
             </p>
         #{/elseif}
         #{else}
             <p class="">
-                <span class="lead">Le prochain évènement aura lieu le <strong>${evenement?.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
-                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement?.titre}<br>
+                <span class="lead">Le prochain évènement aura lieu le <strong>${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}</strong></span><br>
+                <i class="glyphicon glyphicon-chevron-right"></i> ${evenement.titre}<br>
                 <blockquote>
-                    <p><small>${evenement?.description}</small></p>
+                    <p><small>${evenement.description}</small></p>
                 </blockquote>
             </p>
         #{/else}
-        <span>Participants (${evenement?.participants.size()}) : #{list items:evenement?.participants, as:'participant'}${participant.pseudo} #{if evenement?.participants.last() != participant}, #{/if}#{/list}</span>
-        <p class="lead text-center"><a  class="btn btn-success" target="_parent" href="${evenement?.urlForum}"><i class="glyphicon glyphicon-share-alt"></i> Voir le topic et annoncer ma participation</a></p>
+        <span>Participants (${evenement.participants.size()}) : #{list items:evenement.participants, as:'participant'}${participant.pseudo} #{if evenement.participants.last() != participant}, #{/if}#{/list}</span>
+        <p class="lead text-center"><a  class="btn btn-success" target="_parent" href="${evenement.urlForum}"><i class="glyphicon glyphicon-share-alt"></i> Voir le topic et annoncer ma participation</a></p>
     #{/if}
     #{else}
         <p class="lead text-center">Aucun évènement à venir</p>
