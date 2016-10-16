@@ -74,23 +74,35 @@
             <ul class="sidebar-menu">
                 <li class="header">MENU</li>
                 #{if !request.action.contains("premiereConnexion")}
-                <li class="#{if request.action.contains("Dashboard")}active#{/if}">
-                <a href="@{backoffice.Dashboard.index()}">
-                    <i class="fa fa-th"></i> <span>Dashboard</span> <small class="label pull-right bg-green"></small>
-                </a>
-                </li>
-                <li>
-                    <a href="https://veterans.armasites.com/index.php" target="_blank">
-                        <i class="fa fa-angle-right"></i> <span>Forum</span> <small class="label pull-right bg-green"></small>
+                    <li class="#{if request.action.contains("Dashboard")}active#{/if}">
+                    <a href="@{backoffice.Dashboard.index()}">
+                        <i class="fa fa-th"></i> <span>Dashboard</span> <small class="label pull-right bg-green"></small>
                     </a>
-                </li>
-                #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
-                <li class="#{if request.action.contains("Comptes")}active#{/if}">
-                    <a href="@{backoffice.Comptes.index()}">
-                        <i class="fa fa-users"></i> <span>Comptes</span> <small class="label pull-right bg-green"></small>
-                    </a>
-                </li>
-                #{/if}
+                    </li>
+                    <li>
+                        <a href="https://veterans.armasites.com/index.php" target="_blank">
+                            <i class="fa fa-angle-right"></i> <span>Forum</span> <small class="label pull-right bg-green"></small>
+                        </a>
+                    </li>
+                    <li class="#{if request.action.contains("Calendrier")}active#{/if}">
+                        <a href="@{backoffice.Calendrier.index()}">
+                            <i class="fa fa-calendar"></i> <span>Calendrier</span> <small class="label pull-right bg-green"></small>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@{backoffice.Application.deconnexion()}">
+                            <i class="fa fa-remove"></i> <span>Déconnexion</span> <small class="label pull-right bg-green"></small>
+                        </a>
+                    </li>
+
+                    <li class="header">ADMIBISTRATION</li>
+                    #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
+                        <li class="#{if request.action.contains("Comptes")}active#{/if}">
+                            <a href="@{backoffice.Comptes.index()}">
+                                <i class="fa fa-users"></i> <span>Comptes</span> <small class="label pull-right bg-green"></small>
+                            </a>
+                        </li>
+                    #{/if}
                     #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
                         <li class="#{if request.action.contains("MOTD")}active#{/if}">
                             <a href="@{backoffice.MOTD.index()}">
@@ -98,16 +110,13 @@
                             </a>
                         </li>
                     #{/if}
-                <li class="#{if request.action.contains("Calendrier")}active#{/if}">
-                    <a href="@{backoffice.Calendrier.index()}">
-                        <i class="fa fa-calendar"></i> <span>Calendrier</span> <small class="label pull-right bg-green"></small>
-                    </a>
-                </li>
-                <li>
-                    <a href="@{backoffice.Application.deconnexion()}">
-                        <i class="fa fa-remove"></i> <span>Déconnexion</span> <small class="label pull-right bg-green"></small>
-                    </a>
-                </li>
+                    #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
+                        <li class="#{if request.action.contains("Tracks")}active#{/if}">
+                            <a href="@{backoffice.Tracks.index()}">
+                                <i class="glyphicon glyphicon-console"></i> <span>Tracks</span> <small class="label pull-right bg-green"></small>
+                            </a>
+                        </li>
+                    #{/if}
                 #{/if}
             </ul>
         </section>

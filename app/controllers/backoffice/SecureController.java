@@ -1,6 +1,8 @@
 package controllers.backoffice;
 
 import models.Compte;
+import models.Track;
+import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
 
@@ -29,6 +31,18 @@ public class SecureController extends Controller {
             }
         } catch(Exception e) {
             Application.connexion();
+        }
+
+    }
+
+    @Before
+    public static void track() {
+        try {
+            Track t = new Track(request);
+            t.compte = getCompte();
+            t.save();
+        } catch(Exception e) {
+            if(Play.mode.isDev()) e.printStackTrace();
         }
 
     }

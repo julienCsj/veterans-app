@@ -11,7 +11,8 @@ import java.util.Date;
 public class Dashboard extends SecureController {
 
     public static void index() {
-        render();
+        Compte compte = getCompte();
+        render(compte);
     }
 
     public static void premiereConnexion() {

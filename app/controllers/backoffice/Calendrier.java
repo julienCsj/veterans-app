@@ -52,9 +52,9 @@ public class Calendrier extends SecureController {
         render(evenementNonPlaces, evenementPlaces, categories, evenementParMois, idEvenementAOuvrir, comptes);
     }
 
-    public static void ajouterEvenementPost(String titre, String description, Evenement.CategorieEvenement categorie, String urlForum) {
+    public static void ajouterEvenementPost(String titre, String description, Evenement.CategorieEvenement categorie, String urlForum, Boolean valide) {
         Compte compte = getCompte();
-        Evenement evenement = new Evenement(titre, description, compte, categorie, urlForum);
+        Evenement evenement = new Evenement(titre, description, compte, categorie, urlForum, valide);
         evenement.save();
 
         flash.success("L'évènement a été créé. Vous pouvez maintenant le placer sur le calendrier (glissez puis déposez à la date souhaitée).");

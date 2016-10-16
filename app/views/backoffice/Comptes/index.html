@@ -40,6 +40,7 @@
                             <td>Groupe</td>
                             <td>Inscription</td>
                             <td>Dernière connexion</td>
+                            <td>Dernière vue</td>
                             <td>Hash de connexion</td>
                             <td>Actions</td>
                         </tr>
@@ -55,6 +56,14 @@
                                 #{/if}
                                 #{else}
                                     ${compte.dateDerniereConnexion?.format("dd/MM/yyyy à HH:mm")}<br><small>${compte.dateDerniereConnexion?.since()}</small>
+                                #{/else}
+                            </td>
+                            <td>
+                                #{if !compte.dateDerniereVueBox}
+                                    <span class="text-danger"><i class="fa fa-warning"></i> Jamais vue</span>
+                                #{/if}
+                                #{else}
+                                ${compte.dateDerniereVueBox?.format("dd/MM/yyyy à HH:mm")}<br><small>${compte.dateDerniereVueBox?.since()}</small>
                                 #{/else}
                             </td>
                             <td><pre>${compte.hash} <a class="" href="@{backoffice.Comptes.resetCompte(compte.id)}"><i class="fa fa-refresh"></i></a></pre></td>

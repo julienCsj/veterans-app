@@ -36,6 +36,10 @@ public class Compte extends Model {
     @Temporal(TemporalType.TIMESTAMP)
     public Date dateDerniereConnexion;
 
+    @Column(nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date dateDerniereVueBox;
+
     public Compte(String pseudo) {
         this.pseudo = pseudo;
         this.motDePasse = null;
