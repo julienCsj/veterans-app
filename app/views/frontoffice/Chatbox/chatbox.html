@@ -1,0 +1,82 @@
+#{extends 'frontoffice/basePageIFrameWithBack.html' /}
+
+<div class="col-md-3">
+    <!-- DIRECT CHAT WARNING -->
+    <div class="box box-warning direct-chat direct-chat-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title">Chatbox Vétérans<br><small>Accessible uniquement au Vétérans</small></h3>
+
+            <div class="box-tools pull-right">
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="list-message" class="direct-chat-messages">
+
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+            <form action="#" id="envoiMessage" method="post">
+                <div class="input-group">
+                    <input type="text" id="message" name="message" placeholder="Votre message ..." class="form-control">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-warning btn-flat"><i class="fa fa-send"></i></button>
+                      </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+
+        function refreshMessageList() {
+            console.log("refresh IN")
+            $.ajax({
+                url: '/box-chat/messages/${compte.hash}/',
+                type: "GET",
+                success: function (data) {
+                    $("#list-message").html(data);
+                    $('#list-message').scrollTop(1E10);
+
+                },
+                error: function (data) {
+                    console.log("ERROR = "+data);
+                }
+            });
+        }
+
+        // Premier appel pour charger les messages
+        refreshMessageList();
+
+        $("#envoiMessage").submit(function( event ) {
+            event.preventDefault();
+            var message = $("#message").val();
+            console.log(message);
+            $.ajax({
+                url: '/box-chat/ajouterMessage/${compte.hash}/',
+                type: "POST",
+                data: {
+                    message: message
+                },
+                success: function (data) {
+                    $("#message").val('');
+                    refreshMessageList();
+                },
+                error: function (data) {
+                    $("#message").val('');
+                    refreshMessageList();
+                }
+            });
+        });
+
+
+        setInterval(function() {
+            refreshMessageList();
+            console.log("REFRESH LIST")
+        }, 5000);
+    });
+</script>

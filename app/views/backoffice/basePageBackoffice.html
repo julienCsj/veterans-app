@@ -116,6 +116,13 @@
                         </li>
                     #{/if}
                     #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
+                        <li class="#{if request.action.contains("ChatBoxAdmin")}active#{/if}">
+                            <a href="@{backoffice.ChatBoxAdmin.index()}">
+                                <i class="fa fa-comments"></i> <span>ChatBox</span> <small class="label pull-right bg-green"></small>
+                            </a>
+                        </li>
+                    #{/if}
+                    #{if compteConnecte.groupe.equals(models.Compte.Groupe.ADMINISTRATEUR)}
                         <li class="#{if request.action.contains("Tracks")}active#{/if}">
                             <a href="@{backoffice.Tracks.index()}">
                                 <i class="glyphicon glyphicon-console"></i> <span>Tracks</span> <small class="label pull-right bg-green"></small>

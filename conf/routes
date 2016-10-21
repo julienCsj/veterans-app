@@ -22,6 +22,10 @@ GET /box-evenement/incertain/{hash}/{idTopic}    frontoffice.Forum.incertain
 GET /box-evenement-top/{hash}/                   frontoffice.Forum.boxProchainEvenement
 GET /box-evenement-side/{hash}/                  frontoffice.Forum.boxProchainsEvenement
 
+GET /box-chat/{hash}/                            frontoffice.Chatbox.chatbox
+POST /box-chat/ajouterMessage/{hash}/            frontoffice.Chatbox.chatboxPost
+GET /box-chat/messages/{hash}/                   frontoffice.Chatbox.messagesList
+
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
