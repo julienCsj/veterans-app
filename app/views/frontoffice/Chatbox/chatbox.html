@@ -1,6 +1,6 @@
 #{extends 'frontoffice/basePageIFrameWithBack.html' /}
 
-<div class="col-md-3">
+<div class="col-md-12 no-padding">
     <!-- DIRECT CHAT WARNING -->
     <div class="box box-warning direct-chat direct-chat-warning">
         <div class="box-header with-border">
@@ -36,7 +36,6 @@
         var dernierCheck = '${dernierCheck.format("dd-MM-yyyy-HH:mm:ss.SSS")}';
 
         function refreshMessageList() {
-            console.log("refresh IN")
             $.ajax({
                 url: '/box-chat/messages/${compte.hash}/'+dernierCheck+'/',
                 type: "GET",

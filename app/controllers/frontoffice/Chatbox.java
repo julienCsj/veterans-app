@@ -35,7 +35,6 @@ public class Chatbox extends Controller {
     }
 
     public static void messagesList(String hash, @As("dd-MM-yyyy-HH:mm:ss.SSS") Date dernierCheck) {
-        System.out.println(new Date() + " -> APPEL");
         List<ChatBoxMessage> messagesList = ChatBoxMessage.find("silence = false AND dateCreation > ?", dernierCheck).fetch(50);
         Compte compte = Compte.find("hash = ?", hash).first();
         Template t = TemplateLoader.load("frontoffice/Chatbox/messagesList.html");
