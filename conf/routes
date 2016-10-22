@@ -24,7 +24,7 @@ GET /box-evenement-side/{hash}/                  frontoffice.Forum.boxProchainsE
 
 GET /box-chat/{hash}/                            frontoffice.Chatbox.chatbox
 POST /box-chat/ajouterMessage/{hash}/            frontoffice.Chatbox.chatboxPost
-GET /box-chat/messages/{hash}/                   frontoffice.Chatbox.messagesList
+GET /box-chat/messages/{hash}/{dernierCheck}/     frontoffice.Chatbox.messagesList
 
 
 # Ignore favicon requests

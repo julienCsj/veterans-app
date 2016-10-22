@@ -4,7 +4,7 @@
     <!-- DIRECT CHAT WARNING -->
     <div class="box box-warning direct-chat direct-chat-warning">
         <div class="box-header with-border">
-            <h3 class="box-title">Chatbox Vétérans<br><small>Accessible uniquement au Vétérans</small></h3>
+            <h3 class="box-title">Chatbox Vétérans<br><small>Accessible uniquement aux Vétérans</small></h3>
 
             <div class="box-tools pull-right">
             </div>
@@ -12,7 +12,7 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div id="list-message" class="direct-chat-messages">
-
+                #{include '/frontoffice/Chatbox/messagesList.html', messages:messagesList /}
             </div>
         </div>
         <!-- /.box-body -->
@@ -21,7 +21,7 @@
                 <div class="input-group">
                     <input type="text" id="message" name="message" placeholder="Votre message ..." class="form-control">
                     <span class="input-group-btn">
-                        <button type="submit" class="btn btn-warning btn-flat"><i class="fa fa-send"></i></button>
+                        <button type="submit" autocomplete="off" class="btn btn-warning btn-flat"><i class="fa fa-send"></i></button>
                       </span>
                 </div>
             </form>
@@ -33,15 +33,17 @@
 <script>
     $(document).ready(function() {
 
+        var dernierCheck = '${dernierCheck.format("dd-MM-yyyy-HH:mm:ss.SSS")}';
+
         function refreshMessageList() {
             console.log("refresh IN")
             $.ajax({
-                url: '/box-chat/messages/${compte.hash}/',
+                url: '/box-chat/messages/${compte.hash}/'+dernierCheck+'/',
                 type: "GET",
                 success: function (data) {
-                    $("#list-message").html(data);
+                    dernierCheck = data.dernierCheck;
+                    $("#list-message").append(data.html);
                     $('#list-message').scrollTop(1E10);
-
                 },
                 error: function (data) {
                     console.log("ERROR = "+data);
@@ -51,6 +53,8 @@
 
         // Premier appel pour charger les messages
         refreshMessageList();
+        $('#list-message').scrollTop(1E10);
+
 
         $("#envoiMessage").submit(function( event ) {
             event.preventDefault();
