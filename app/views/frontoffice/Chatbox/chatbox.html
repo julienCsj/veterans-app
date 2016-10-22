@@ -42,7 +42,9 @@
                 success: function (data) {
                     dernierCheck = data.dernierCheck;
                     $("#list-message").append(data.html);
-                    $('#list-message').scrollTop(1E10);
+                    if(data.html != "") {
+                        $('#list-message').scrollTop(1E10);
+                    }
                 },
                 error: function (data) {
                     console.log("ERROR = "+data);
