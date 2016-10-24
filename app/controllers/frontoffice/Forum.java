@@ -94,7 +94,7 @@ public class Forum extends Controller {
         compte.dateDerniereVueBox = new Date();
         compte.save();
         MOTD motd = MOTD.find("afficher = ?", true).first();
-        Evenement evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut DESC", new Date(), true).first();
+        Evenement evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut ASC", new Date(), true).first();
 
         render(motd, evenement, compte);
     }
