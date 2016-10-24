@@ -31,7 +31,6 @@ public class Forum extends Controller {
     }
 
     public static void boxEvenenement(String hash, Long idTopic) {
-
         // Trouver l'évènement correspondant
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();

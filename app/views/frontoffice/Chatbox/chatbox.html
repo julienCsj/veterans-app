@@ -44,6 +44,9 @@
                     $("#list-message").append(data.html);
                     if(data.html != "") {
                         $('#list-message').scrollTop(1E10);
+                        // Son
+                        var audio = new Audio('@{'public/notif.mp3'}');
+                        audio.play();
                     }
                 },
                 error: function (data) {
