@@ -9,10 +9,7 @@ import play.templates.JavaExtensions;
 import play.templates.Template;
 import play.templates.TemplateLoader;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by juliencustoja on 21/10/2016.
@@ -21,7 +18,8 @@ public class Chatbox extends Controller {
 
     public static void chatbox(String hash) {
         Compte compte = Compte.find("hash = ?", hash).first();
-        List<ChatBoxMessage> messagesList = ChatBoxMessage.find("silence = false").fetch(50);
+        List<ChatBoxMessage> messagesList = ChatBoxMessage.find("silence = false order by dateCreation DESC").fetch(50);
+        Collections.reverse(messagesList);
         Date dernierCheck = new Date();
         render(compte, dernierCheck, messagesList);
     }
