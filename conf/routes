@@ -3,36 +3,36 @@
 # ~~~~
 
 # Page de conexion
-GET     /                                       backoffice.Application.connexion
-POST    /connexion                              backoffice.Application.connexionPost
-GET     /connexion/{hash}                       backoffice.Application.connexionHash
-GET     /setData                                backoffice.Application.setData
+GET     /                                         backoffice.Application.connexion
+POST    /connexion                                backoffice.Application.connexionPost
+GET     /connexion/{hash}                         backoffice.Application.connexionHash
+GET     /setData                                  backoffice.Application.setData
 
 
 # Pages front
-GET /carte                                      frontoffice.PagesFront.carteVeterans
+GET /carte                                        frontoffice.PagesFront.carteVeterans
 
 
 # BOX FORUM
-POST /box-evenement/ajouter-evenement            frontoffice.Forum.ajouterEvenement
-GET /box-evenement/{hash}/{idTopic}              frontoffice.Forum.boxEvenenement
-GET /box-evenement/participe/{hash}/{idTopic}    frontoffice.Forum.participe
-GET /box-evenement/absent/{hash}/{idTopic}       frontoffice.Forum.absent
-GET /box-evenement/incertain/{hash}/{idTopic}    frontoffice.Forum.incertain
+POST /box-evenement/ajouter-evenement             frontoffice.Forum.ajouterEvenement
+GET /box-evenement/{hash}/{idTopic}               frontoffice.Forum.boxEvenenement
+GET /box-evenement/participe/{hash}/{idEvenement} frontoffice.Forum.participe
+GET /box-evenement/absent/{hash}/{idEvenement}    frontoffice.Forum.absent
+GET /box-evenement/incertain/{hash}/{idEvenement} frontoffice.Forum.incertain
 
-GET /box-evenement-top/{hash}/                   frontoffice.Forum.boxProchainEvenement
-GET /box-evenement-side/{hash}/                  frontoffice.Forum.boxProchainsEvenement
+GET /box-evenement-top/{hash}/                    frontoffice.Forum.boxProchainEvenement
+GET /box-evenement-side/{hash}/                   frontoffice.Forum.boxProchainsEvenement
 
-GET /box-chat/{hash}/                            frontoffice.Chatbox.chatbox
-POST /box-chat/ajouterMessage/{hash}/            frontoffice.Chatbox.chatboxPost
+GET /box-chat/{hash}/                             frontoffice.Chatbox.chatbox
+POST /box-chat/ajouterMessage/{hash}/             frontoffice.Chatbox.chatboxPost
 GET /box-chat/messages/{hash}/{dernierCheck}/     frontoffice.Chatbox.messagesList
 
 
 # Ignore favicon requests
-GET     /favicon.ico                            404
+GET     /favicon.ico                              404
 
 # Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
+GET     /public/                                   staticDir:public
 
 # Catch all
-*       /{controller}/{action}                  backoffice.{controller}.{action}
+*       /{controller}/{action}                      backoffice.{controller}.{action}

@@ -4,106 +4,153 @@
 <p class="lead text-center">Il faut être connecté pour annoncer sa participation</p>
 #{/if}
 #{else}
-    #{if evenement}
-    <p class="lead">
-    ${evenement.titre} <i class="glyphicon glyphicon-chevron-right"></i> le ${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}<br>
-        <small>${evenement.description}</small>
-    </p>
+    #{if !evenements.isEmpty()}
+        #{if evenements.size() == 1}
+            %{def evenement = evenements.get(0) }%
+            <p class="lead">
+            ${evenement.titre} <i class="glyphicon glyphicon-chevron-right"></i> le ${evenement.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}<br>
+                <small>${evenement.description}</small>
+            </p>
 
-    <table class="table no-border" style="width: 100%; border-top: none;">
-        <tr class="no-border" style="border-top:none;">
-            <td width="70%" style="border-top:none;">
-                <ul>
-                    <li>Participants (${evenement.participants.size()}) : #{list items:evenement.participants, as:'participant'}${participant.pseudo} #{if evenement.participants.last() != participant}, #{/if}#{/list}</li>
-                    <li>Incertains (${evenement.incertains.size()}) : #{list items:evenement.incertains, as:'incertain'}${incertain.pseudo}#{if evenement.incertains.last() != incertain}, #{/if}#{/list}</li>
-                    <li>Absents (${evenement.absents.size()}) : #{list items:evenement.absents, as:'absent'}${absent.pseudo}#{if evenement.absents.last() != absent}, #{/if}#{/list}</li>
-                </ul>
-            </td>
-            <td width="30%" style="border-top:none;">
-            #{if !evenement.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement.idTopic)}">Je participe</a><br>#{/if}
-            #{if !evenement.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement.idTopic)}">Je ne sais pas</a><br>#{/if}
-            #{if !evenement.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement.idTopic)}">Je suis absent</a>#{/if}
-            </td>
-        </tr>
-    </table>
+            <table class="table no-border" style="width: 100%; border-top: none;">
+                <tr class="no-border" style="border-top:none;">
+                    <td width="70%" style="border-top:none;">
+                        <ul>
+                            <li>Participants (${evenement.participants.size()}) : #{list items:evenement.participants, as:'participant'}${participant.pseudo} #{if evenement.participants.last() != participant}, #{/if}#{/list}</li>
+                            <li>Incertains (${evenement.incertains.size()}) : #{list items:evenement.incertains, as:'incertain'}${incertain.pseudo}#{if evenement.incertains.last() != incertain}, #{/if}#{/list}</li>
+                            <li>Absents (${evenement.absents.size()}) : #{list items:evenement.absents, as:'absent'}${absent.pseudo}#{if evenement.absents.last() != absent}, #{/if}#{/list}</li>
+                        </ul>
+                    </td>
+                    <td width="30%" style="border-top:none;">
+                    #{if !evenement.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement.id)}">Je participe</a><br>#{/if}
+                    #{if !evenement.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement.id)}">Je ne sais pas</a><br>#{/if}
+                    #{if !evenement.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement.id)}">Je suis absent</a>#{/if}
+                    </td>
+                </tr>
+            </table>
+        #{/if}
+        #{elseif evenements.size() == 2}
+        %{def evenement1 = evenements.get(0) }%
+        %{def evenement2 = evenements.get(1) }%
+        <p class="lead">
+            ${evenement1.titre} <i class="glyphicon glyphicon-chevron-right"></i> le ${evenement1.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")} & ${evenement2.dateDebut.format("EEEEE dd MMMM yyyy à HH:mm", "fr")}<br>
+            <small>${evenement1.description}</small>
+        </p>
+
+        <table class="table no-border" style="width: 100%; border-top: none;">
+            <tr class="no-border" style="border-top:none;">
+                <td width="45%" style="border-top:none;">
+                    <h4>${evenement1.dateDebut.format("EEEEE", "fr").capFirst()} : </h4>
+                    <ul>
+                        <li>Participants (${evenement1.participants.size()}) : #{list items:evenement1.participants, as:'participant'}${participant.pseudo} #{if evenement1.participants.last() != participant}, #{/if}#{/list}</li>
+                        <li>Incertains (${evenement1.incertains.size()}) : #{list items:evenement1.incertains, as:'incertain'}${incertain.pseudo}#{if evenement1.incertains.last() != incertain}, #{/if}#{/list}</li>
+                        <li>Absents (${evenement1.absents.size()}) : #{list items:evenement1.absents, as:'absent'}${absent.pseudo}#{if evenement1.absents.last() != absent}, #{/if}#{/list}</li>
+                    </ul>
+                    #{if !evenement1.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement1.id)}">Je participe</a><br>#{/if}
+                    #{if !evenement1.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement1.id)}">Je ne sais pas</a><br>#{/if}
+                    #{if !evenement1.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement1.id)}">Je suis absent</a>#{/if}
+                </td>
+                <td width="10%"></td>
+                <td width="45%" style="border-top:none;">
+                    <h4>${evenement2.dateDebut.format("EEEEE", "fr").capFirst()} : </h4>
+                    <ul>
+                        <li>Participants (${evenement2.participants.size()}) : #{list items:evenement2.participants, as:'participant'}${participant.pseudo} #{if evenement2.participants.last() != participant}, #{/if}#{/list}</li>
+                        <li>Incertains (${evenement2.incertains.size()}) : #{list items:evenement2.incertains, as:'incertain'}${incertain.pseudo}#{if evenement2.incertains.last() != incertain}, #{/if}#{/list}</li>
+                        <li>Absents (${evenement2.absents.size()}) : #{list items:evenement2.absents, as:'absent'}${absent.pseudo}#{if evenement2.absents.last() != absent}, #{/if}#{/list}</li>
+                    </ul>
+                    #{if !evenement2.participants.contains(compte)}<a class="btn btn-success" style="margin-bottom: 5px;" href="@{frontoffice.Forum.participe(compte.hash, evenement2.id)}">Je participe</a><br>#{/if}
+                    #{if !evenement2.incertains.contains(compte)}<a class="btn btn-warning" style="margin-bottom: 5px;" href="@{frontoffice.Forum.incertain(compte.hash, evenement2.id)}">Je ne sais pas</a><br>#{/if}
+                    #{if !evenement2.absents.contains(compte)}<a class="btn btn-danger" href="@{frontoffice.Forum.absent(compte.hash, evenement2.id)}">Je suis absent</a>#{/if}
+                </td>
+            </tr>
+        </table>
+
+        #{/elseif}
     #{/if}
     #{else}
         <h4 class="text-center">Création de l'évènement</h4>
         <form action="@{frontoffice.Forum.ajouterEvenement}" method="post">
             <input type="hidden" name="idTopic" value="${idTopic}">
             <input type="hidden" name="hash" value="${hash}">
-            <div class="form-group">
-                <label for="nom">Nom de l'évènement</label>
-                <input type="text" class="form-control" id="nom" name="nom">
-            </div>
-
-            <div class="form-group">
-                <label for="nom">Description</label>
-                <input type="text" class="form-control" id="nom" description="description">
-            </div>
-
-            <div class="form-group">
-                <label for="description">Type d'évenement</label>
-                <select class="form-control" id="type" name="categorie">
-                    #{list categories}
-                        <option value="${_}">${_.traduction}</option>
-                    #{/list}
-                </select>
-            </div>
-
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="deuxJour"> Il s'agit d'un évènement sur 2 jours (évènement le jour défini et le lendemain)
-                </label>
-            </div>
-
-            <div class="form-group">
-                <label for="nom">Date</label>
-            </div>
-
             <table class="no-border">
                 <tr>
-                    <td>
-                        <select class="form-control" name="jour">
-                            #{list items:1..31}
-                                <option value="${_}">${_}</option>
-                            #{/list}
-                        </select>
+                    <td width="45%">
+                        <div class="form-group">
+                            <label for="nom">Nom de l'évènement</label>
+                            <input type="text" class="form-control" id="nom" name="nom">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nom">Description</label>
+                            <input type="text" class="form-control" id="nom" description="description">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Type d'évenement</label>
+                            <select class="form-control" id="type" name="categorie">
+                                #{list categories}
+                                    <option value="${_}">${_.traduction}</option>
+                                #{/list}
+                            </select>
+                        </div>
                     </td>
-                    <td>
-                        <select class="form-control" name="mois">
-                            #{list items:1..12}
-                                <option value="${_}">${_}</option>
-                            #{/list}
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" name="annee">
-                            #{list items:2016..2017}
-                                <option value="${_}">${_}</option>
-                            #{/list}
-                        </select>
-                    </td>
-                    <td>
-                        à
-                    </td>
-                    <td>
-                        <select class="form-control" name="heure">
-                            #{list items:0..23}
-                                <option value="${_}">${_}</option>
-                            #{/list}
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-control" name="minute">
-                            #{list items:[0, 15, 30, 45]}
-                                <option value="${_}">${_}</option>
-                            #{/list}
-                        </select>
+                    <td width="10%"></td>
+                    <td width="45%">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="deuxJour"> Il s'agit d'un évènement sur 2 jours (évènement le jour défini et le lendemain)
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nom">Date</label>
+                        </div>
+
+                        <table class="no-border">
+                            <tr>
+                                <td>
+                                    <select class="form-control" name="jour">
+                                        #{list items:1..31}
+                                            <option value="${_}">${_}</option>
+                                        #{/list}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="mois">
+                                        #{list items:1..12}
+                                            <option value="${_}">${_}</option>
+                                        #{/list}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="annee">
+                                        #{list items:2016..2017}
+                                            <option value="${_}">${_}</option>
+                                        #{/list}
+                                    </select>
+                                </td>
+                                <td>
+                                    à
+                                </td>
+                                <td>
+                                    <select class="form-control" name="heure">
+                                        #{list items:0..23}
+                                            <option value="${_}">${_}</option>
+                                        #{/list}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" name="minute">
+                                        #{list items:[0, 15, 30, 45]}
+                                            <option value="${_}">${_}</option>
+                                        #{/list}
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
-            <p><br></p>
             <button type="submit" class="btn btn-default">Ajouter l'évènement</button>
         </form>
     #{/else}

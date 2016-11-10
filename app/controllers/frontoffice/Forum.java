@@ -36,46 +36,47 @@ public class Forum extends Controller {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
+        List<Evenement> evenements = Evenement.find("idTopic = ? AND valide  = ? order by dateDebut asc", idTopic, true).fetch();
         Evenement.CategorieEvenement[] categories = Evenement.CategorieEvenement.values();
 
-        render(compte, evenement, idTopic, hash, categories);
+        System.out.println(evenements.size());
+        render(compte, evenements, idTopic, hash, categories);
     }
 
-    public static void participe(String hash, Long idTopic) {
+    public static void participe(String hash, Long idEvenement) {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
+        Evenement evenement = Evenement.find("id = ? AND valide  = ?", idEvenement, true).first();
         evenement.participants.add(compte);
         evenement.absents.remove(compte);
         evenement.incertains.remove(compte);
         evenement.save();
-        boxEvenenement(hash, idTopic);
+        boxEvenenement(hash, evenement.idTopic);
     }
 
-    public static void incertain(String hash, Long idTopic) {
+    public static void incertain(String hash, Long idEvenement) {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
+        Evenement evenement = Evenement.find("id = ? AND valide  = ?", idEvenement, true).first();
         evenement.incertains.add(compte);
         evenement.participants.remove(compte);
         evenement.absents.remove(compte);
         evenement.save();
-        boxEvenenement(hash, idTopic);
+        boxEvenenement(hash, evenement.idTopic);
     }
 
-    public static void absent(String hash, Long idTopic) {
+    public static void absent(String hash, Long idEvenement) {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
-        Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
+        Evenement evenement = Evenement.find("id = ? AND valide  = ?", idEvenement, true).first();
         evenement.absents.add(compte);
         evenement.participants.remove(compte);
         evenement.incertains.remove(compte);
         evenement.save();
-        boxEvenenement(hash, idTopic);
+        boxEvenenement(hash, evenement.idTopic);
     }
 
 
@@ -84,16 +85,7 @@ public class Forum extends Controller {
         compte.dateDerniereVueBox = new Date();
         compte.save();
         MOTD motd = MOTD.find("afficher = ?", true).first();
-
-        Date hier = DateTime.now().withMillisOfDay(0).minusDays(1).toDate();
-        Evenement evenementHier = Evenement.find("dateDebut > ?  AND valide  = ? AND deuxJours = ? order by dateDebut ASC", hier, true, true).first();
-        Evenement evenement = null;
-        // Si hier il y avait un evenement qui dure deux jours, alors on reste dessus
-        if(evenementHier != null) {
-            evenement = evenementHier;
-        } else {
-            evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut ASC", new Date(), true).first();
-        }
+        Evenement evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut ASC", new Date(), true).first();
 
         render(motd, evenement, compte);
     }
@@ -104,6 +96,13 @@ public class Forum extends Controller {
         Evenement evenement = new Evenement(nom, description, compte, categorie, "t="+idTopic, true, deuxJour);
         evenement.dateDebut = date;
         evenement.save();
+
+        if(deuxJour != null && deuxJour) {
+            Date dateNouvelEvenement = new DateTime(date).plusDays(1).toDate();
+            Evenement evenementDemain = new Evenement(nom, description, compte, categorie, "t="+idTopic, true, deuxJour);
+            evenementDemain.dateDebut = dateNouvelEvenement;
+            evenementDemain.save();
+        }
         boxEvenenement(compte.hash, idTopic);
     }
 
