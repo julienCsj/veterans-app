@@ -8,7 +8,7 @@
                 <div class="box-header bordered">
                     <h3 class="box-title">Missions du serveur privé</h3>
                     <div class="box-tools pull-right">
-                        <button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#ajouterMission">Ajouter une mission</button>
+                        <button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#modalAjoutMission">Ajouter une mission</button>
                     </div>
                 </div>
                 <div class="box-body no-padding">
@@ -79,4 +79,30 @@
 
         </div><!-- /.col -->
     </div>
-</section><!-- /.content --><!-- Main content -->
+</section><!-- /.content -->
+
+
+
+<div class="modal fade" id="modalAjoutMission" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <form action="@{backoffice.Missions.ajouterFichier()}" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Ajouter une mission</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="mission">Votre mission (.pbo)</label>
+                        <input type="file" id="mission" name="mission">
+                        <p class="help-block">Votre mission sera ajoutée directement aux missions non archivées</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <input type="submit" class="btn btn-primary" value="Ajouter">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

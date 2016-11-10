@@ -6,6 +6,9 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import play.Play;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -119,7 +122,6 @@ public class Missions extends SecureController {
 
         try {
             boolean success = true;
-            // Liste des missions
             success = ftpClient.rename("/mpmissions/"+name, "mpmissions_archives/"+name);
             if(!success) {
                 flash.error("Erreur lors de l'archivage de la mission.");
@@ -148,7 +150,6 @@ public class Missions extends SecureController {
 
         try {
             boolean success = true;
-            // Liste des missions
             success = ftpClient.rename("/mpmissions_archives/"+name, "mpmissions/"+name);
             if(!success) {
                 flash.error("Erreur lors du desarchivage de la mission.");
@@ -163,6 +164,45 @@ public class Missions extends SecureController {
         }
 
         flash.success("Mission desarchivée");
+        flash.keep();
+
+        index();
+    }
+
+    public static void ajouterFichier(File mission) {
+        FTPClient ftpClient = connectFTP();
+        if(ftpClient == null) {
+            flash.error("Erreur lors de la connexion au serveur");
+            render();
+        }
+
+        try {
+            boolean success = true;
+
+            // Se mettre dans le repertoire /mpmissions
+            success = ftpClient.changeWorkingDirectory("/mpmissions");
+            if(!success) {
+                flash.error("Impossible de lire le contenu du repertoire /mpmissions");
+                render();
+            }
+
+            // Envoyer le fichier
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(mission));
+            success = ftpClient.storeFile(mission.getName(), bis);
+            bis.close();
+            if(!success) {
+                flash.error("Erreur lors du desarchivage de la mission.");
+                flash.keep();
+                index();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            flash.error("Erreur lors de l'envoi de la mission. Voir avec Julien");
+            flash.keep();
+        }
+
+        flash.success(mission.getName() + "est bien arrivé sur le serveur");
         flash.keep();
 
         index();
