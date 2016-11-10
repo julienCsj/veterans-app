@@ -80,7 +80,7 @@
                     </a>
                     </li>
                     <li>
-                        <a href="https://veterans.armasites.com/index.php" target="_blank">
+                        <a href="http://veterans.armasites.com/index.php" target="_blank">
                             <i class="fa fa-angle-right"></i> <span>Forum</span> <small class="label pull-right bg-green"></small>
                         </a>
                     </li>
@@ -92,6 +92,11 @@
                     <li class="#{if request.action.contains("Calendrier")}active#{/if}">
                         <a href="@{backoffice.Calendrier.index()}">
                             <i class="fa fa-calendar"></i> <span>Calendrier</span> <small class="label pull-right bg-green"></small>
+                        </a>
+                    </li>
+                    <li class="#{if request.action.contains("Missions")}active#{/if}">
+                        <a href="@{backoffice.Missions.index()}">
+                            <i class="fa fa-server"></i> <span>Missions</span> <small class="label pull-right bg-green"></small>
                         </a>
                     </li>
                     <li>

@@ -1,0 +1,82 @@
+#{extends 'backoffice/basePageBackoffice.html'/}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header bordered">
+                    <h3 class="box-title">Missions du serveur privé</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-primary btn-xs pull-right" data-toggle="modal" data-target="#ajouterMission">Ajouter une mission</button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr class="active">
+                                        <td>Fichier</td>
+                                        <td>Taille</td>
+                                        <td>Dernière modification</td>
+                                        <td>Actions</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    #{list items:filesList, as:'file'}
+                                        <tr>
+                                            <td>${file?.getName()}</td>
+                                            <td>${file?.getSize()}</td>
+                                            <td>${file?.getTimestamp()?.getTime()?.format("dd/MM/yyyy HH:mm")}</td>
+                                            <td>
+                                                <a href="@{backoffice.Missions.archiverFichier(file?.getName())}"><i class="fa fa-archive"></i></a>
+                                            </td>
+                                        </tr>
+                                    #{/list}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box box-primary">
+                <div class="box-header bordered">
+                    <h3 class="box-title">Missions archivées du serveur privé</h3>
+                    <div class="box-tools pull-right">
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                <tr class="active">
+                                    <td>Fichier</td>
+                                    <td>Taille</td>
+                                    <td>Dernière modification</td>
+                                    <td>Actions</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                #{list items:filesArchiveList, as:'file'}
+                                <tr>
+                                    <td>${file?.getName()}</td>
+                                    <td>${file?.getSize()}</td>
+                                    <td>${file?.getTimestamp()?.getTime()?.format("dd/MM/yyyy HH:mm")}</td>
+                                    <td>
+                                        <a href="@{backoffice.Missions.desarchiverFichier(file?.getName())}"><i class="fa fa-arrow-circle-up "></i></a>
+                                    </td>
+                                </tr>
+                                #{/list}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.col -->
+    </div>
+</section><!-- /.content --><!-- Main content -->
