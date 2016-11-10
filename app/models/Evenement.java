@@ -61,7 +61,10 @@ public class Evenement extends Model implements Comparable<Evenement> {
     @Column(nullable = true, updatable = true)
     public Boolean valide;
 
-    public Evenement(String titre, String description, Compte compte, CategorieEvenement categorie, String urlForum, Boolean valide) {
+    @Column(nullable = true, updatable = true)
+    public Boolean deuxJours;
+
+    public Evenement(String titre, String description, Compte compte, CategorieEvenement categorie, String urlForum, Boolean valide, Boolean deuxJours) {
         this.titre = titre;
         this.description = description;
         this.compte = compte;
@@ -69,6 +72,7 @@ public class Evenement extends Model implements Comparable<Evenement> {
         this.urlForum = urlForum;
         this.idTopic = extractIdFromUrl(urlForum);
         this.valide = valide;
+        this.deuxJours = deuxJours;
     }
 
     private Long extractIdFromUrl(String urlForum) {

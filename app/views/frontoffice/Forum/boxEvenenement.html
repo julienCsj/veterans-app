@@ -28,6 +28,83 @@
     </table>
     #{/if}
     #{else}
-    <p class="lead text-center">Aucun évènement lié à ce sujet</p>
+        <h4 class="text-center">Création de l'évènement</h4>
+        <form action="@{frontoffice.Forum.ajouterEvenement}" method="post">
+            <input type="hidden" name="idTopic" value="${idTopic}">
+            <input type="hidden" name="hash" value="${hash}">
+            <div class="form-group">
+                <label for="nom">Nom de l'évènement</label>
+                <input type="text" class="form-control" id="nom" name="nom">
+            </div>
+
+            <div class="form-group">
+                <label for="nom">Description</label>
+                <input type="text" class="form-control" id="nom" description="description">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Type d'évenement</label>
+                <select class="form-control" id="type" name="categorie">
+                    #{list categories}
+                        <option value="${_}">${_.traduction}</option>
+                    #{/list}
+                </select>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="deuxJour"> Il s'agit d'un évènement sur 2 jours (évènement le jour défini et le lendemain)
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="nom">Date</label>
+            </div>
+
+            <table class="no-border">
+                <tr>
+                    <td>
+                        <select class="form-control" name="jour">
+                            #{list items:1..31}
+                                <option value="${_}">${_}</option>
+                            #{/list}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" name="mois">
+                            #{list items:1..12}
+                                <option value="${_}">${_}</option>
+                            #{/list}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" name="annee">
+                            #{list items:2016..2017}
+                                <option value="${_}">${_}</option>
+                            #{/list}
+                        </select>
+                    </td>
+                    <td>
+                        à
+                    </td>
+                    <td>
+                        <select class="form-control" name="heure">
+                            #{list items:0..23}
+                                <option value="${_}">${_}</option>
+                            #{/list}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control" name="minute">
+                            #{list items:[0, 15, 30, 45]}
+                                <option value="${_}">${_}</option>
+                            #{/list}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <p><br></p>
+            <button type="submit" class="btn btn-default">Ajouter l'évènement</button>
+        </form>
     #{/else}
 #{/else}

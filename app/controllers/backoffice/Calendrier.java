@@ -52,10 +52,15 @@ public class Calendrier extends SecureController {
         render(evenementNonPlaces, evenementPlaces, categories, evenementParMois, idEvenementAOuvrir, comptes);
     }
 
-    public static void ajouterEvenementPost(String titre, String description, Evenement.CategorieEvenement categorie, String urlForum, Boolean valide) {
+    public static void ajouterEvenementPost(String titre, String description, Evenement.CategorieEvenement categorie, String urlForum, Boolean valide, Boolean deuxJours) {
         Compte compte = getCompte();
-        Evenement evenement = new Evenement(titre, description, compte, categorie, urlForum, valide);
-        evenement.save();
+        try {
+            Evenement evenement = new Evenement(titre, description, compte, categorie, urlForum, valide, deuxJours);
+            evenement.save();
+        } catch (Exception e) {
+            flash.error("Impossible de créer votre évènement (vérifier que l'URL du post sur le forum est correcte, elle doit contenir t=[un nombre]");
+            index(null);
+        }
 
         flash.success("L'évènement a été créé. Vous pouvez maintenant le placer sur le calendrier (glissez puis déposez à la date souhaitée).");
         index(null);

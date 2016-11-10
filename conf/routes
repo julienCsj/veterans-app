@@ -14,6 +14,7 @@ GET /carte                                      frontoffice.PagesFront.carteVete
 
 
 # BOX FORUM
+POST /box-evenement/ajouter-evenement            frontoffice.Forum.ajouterEvenement
 GET /box-evenement/{hash}/{idTopic}              frontoffice.Forum.boxEvenenement
 GET /box-evenement/participe/{hash}/{idTopic}    frontoffice.Forum.participe
 GET /box-evenement/absent/{hash}/{idTopic}       frontoffice.Forum.absent

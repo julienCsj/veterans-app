@@ -4,6 +4,7 @@ import models.Compte;
 import models.Evenement;
 import models.MOTD;
 import models.Track;
+import org.joda.time.DateTime;
 import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -36,7 +37,9 @@ public class Forum extends Controller {
         compte.dateDerniereVueBox = new Date();
         compte.save();
         Evenement evenement = Evenement.find("idTopic = ? AND valide  = ?", idTopic, true).first();
-        render(compte, evenement);
+        Evenement.CategorieEvenement[] categories = Evenement.CategorieEvenement.values();
+
+        render(compte, evenement, idTopic, hash, categories);
     }
 
     public static void participe(String hash, Long idTopic) {
@@ -75,27 +78,33 @@ public class Forum extends Controller {
         boxEvenenement(hash, idTopic);
     }
 
-    public static void boxProchainsEvenement(String hash) {
-        Compte compte = Compte.find("hash = ?", hash).first();
-        compte.dateDerniereVueBox = new Date();
-        compte.save();
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(new Date());
-        cal.add(Calendar.DAY_OF_YEAR, 14);
-
-        Date dans14jours = cal.getTime();
-        List<Evenement> evenements = Evenement.find("dateDebut > ? and dateDebut < ?  AND valide  = ?", new Date(), dans14jours, true).fetch();
-        render(evenements);
-    }
 
     public static void boxProchainEvenement(String hash) {
         Compte compte = Compte.find("hash = ?", hash).first();
         compte.dateDerniereVueBox = new Date();
         compte.save();
         MOTD motd = MOTD.find("afficher = ?", true).first();
-        Evenement evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut ASC", new Date(), true).first();
+
+        Date hier = DateTime.now().withMillisOfDay(0).minusDays(1).toDate();
+        Evenement evenementHier = Evenement.find("dateDebut > ?  AND valide  = ? AND deuxJours = ? order by dateDebut ASC", hier, true, true).first();
+        Evenement evenement = null;
+        // Si hier il y avait un evenement qui dure deux jours, alors on reste dessus
+        if(evenementHier != null) {
+            evenement = evenementHier;
+        } else {
+            evenement = Evenement.find("dateDebut > ?  AND valide  = ? order by dateDebut ASC", new Date(), true).first();
+        }
 
         render(motd, evenement, compte);
+    }
+
+    public static void ajouterEvenement(String hash, Evenement.CategorieEvenement categorie, String nom, String description, Long idTopic, Boolean deuxJour, Integer jour, Integer mois, Integer annee, Integer heure, Integer minute) {
+        Compte compte = Compte.find("hash = ?", hash).first();
+        Date date = DateTime.now().withDate(annee, mois, jour).withHourOfDay(heure).withMinuteOfHour(minute).withSecondOfMinute(0).toDate();
+        Evenement evenement = new Evenement(nom, description, compte, categorie, "t="+idTopic, true, deuxJour);
+        evenement.dateDebut = date;
+        evenement.save();
+        boxEvenenement(compte.hash, idTopic);
     }
 
 }

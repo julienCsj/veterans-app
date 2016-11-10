@@ -25,8 +25,8 @@
                         <div class="col-md-12">
                             <div id='external-events'>
                             #{list evenementNonPlaces}
-                                <div class="external-event" data-titre="${_.titre}" data-description="${_.description}" data-couleur="${_.categorie.couleur}" data-id="${_.id}">
-                                    <span class="list-group-item external-event" style="background-color: ${_.categorie.couleur}">
+                                <div class="external-event" data-titre="${_.titre}" data-description="${_.description}" data-couleur="${_.categorie?.couleur}" data-id="${_.id}">
+                                    <span class="list-group-item external-event" style="background-color: ${_.categorie?.couleur}">
                                         <div class="pull-right"><a href="@{backoffice.Calendrier.supprimerEvenement(_.id)}" style="color: #f5f5f5"><i class="ion ion-trash-b"> </i></a></div>
                                         <h4 class="list-group-item-heading" id="list-group-item-heading" style="color:white;">${_.titre}</h4>
                                         <p class="list-group-item-text"><small>${_.description}</small></p>
@@ -114,6 +114,15 @@
                                 <option value="false">NON</option>
                             </select>
                             <p class="help-text">L'évènement ne sera pas proposé sur le forum tant qu'il n'est pas validé</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="titre">Sur deux jours ?</label>
+                            <select class="form-control" id="deuxJours" name="deuxJours">
+                                <option value="true">OUI</option>
+                                <option value="false" selected>NON</option>
+                            </select>
+                            <p class="help-text">Choisir OUI si par exemple, il s'agit d'une mission jouée vendredi et samedi</p>
                         </div>
                     </div>
                 </div>
@@ -216,7 +225,7 @@
                             <li>Le <strong>${evenement.dateDebut.format("dd/MM/yyyy")}</strong>
                                 #{if evenement.dateDebut.format("HH:mm") != "00:00"} à <strong>${evenement.dateDebut.format("HH:mm")}</strong>#{/if}
                                 : ${evenement.titre}
-                                <span class="badge" style="background-color: ${evenement.categorie.couleur}">${evenement.categorie.traduction}</span>
+                                <span class="badge" style="background-color: ${evenement?.categorie?.couleur}">${evenement?.categorie?.traduction}</span>
                                 <a href="#" class="voirEvenement12Mois" data-id="${evenement.id}"><i class="fa fa-arrow-circle-right"></i></a></li>
                         #{/list}
                     </ul>
