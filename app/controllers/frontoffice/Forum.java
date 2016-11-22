@@ -99,7 +99,7 @@ public class Forum extends Controller {
 
         if(deuxJour != null && deuxJour) {
             Date dateNouvelEvenement = new DateTime(date).plusDays(1).toDate();
-            Evenement evenementDemain = new Evenement(nom, description, compte, categorie, "t="+idTopic, true, deuxJour);
+            Evenement evenementDemain = new Evenement(nom, description, compte, categorie, "http://veterans.armasites.com/viewtopic.php?t="+idTopic, true, deuxJour);
             evenementDemain.dateDebut = dateNouvelEvenement;
             evenementDemain.save();
         }
